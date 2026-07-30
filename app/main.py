@@ -32,6 +32,11 @@ from app.permissions import require_enrolled_student, require_course_teacher
 
 load_dotenv()
 
+# Load DATABASE_URL from environment
+DATABASE_URL = os.getenv("DATABASE_URL")
+print("DATABASE_URL is:", DATABASE_URL)  # Debug check
+
+
 app = FastAPI(
     title="LearnHub LMS",
     description="Learning Management System with AI Tutoring",
@@ -1178,3 +1183,7 @@ def get_pending_grades(token: str = None, db: Session = Depends(get_db)):
 
     results.sort(key=lambda x: x["submitted_at"])
     return results
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
