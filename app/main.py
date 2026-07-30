@@ -910,10 +910,6 @@ def get_progress(course_id: int, token: str = None, db: Session = Depends(get_db
     }
 
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
-
 @app.get("/student/summary", response_model=StudentSummaryResponse)
 def get_student_summary(token: str = None, db: Session = Depends(get_db)):
     """
@@ -1186,4 +1182,7 @@ def get_pending_grades(token: str = None, db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    import os
+    port = int(os.environ.get("PORT", 8000))  # Railway provides PORT
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
+
