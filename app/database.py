@@ -2,11 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 import os
 
-# Get DATABASE_URL from environment (Railway injects this automatically)
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:yourpassword@localhost/learnhub")
 
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL environment variable is missing")
+# Railway uses postgres:// but SQLAlchemy requires postgresql://
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # Create engine
 engine = create_engine(
