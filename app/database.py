@@ -31,6 +31,9 @@ engine = create_engine(
     pool_size=10,
     max_overflow=20
 )
+with engine.connect() as conn:
+    print("Connected to Postgres:", conn.execute("SELECT version();").fetchone())
+
 
 # Session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
