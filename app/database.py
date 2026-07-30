@@ -2,7 +2,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 import os
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:yourpassword@localhost/learnhub")
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+print("=" * 60)
+print("DATABASE_URL exists:", "DATABASE_URL" in os.environ)
+print("DATABASE_URL value:", repr(DATABASE_URL))
+print("=" * 60)
+
+if DATABASE_URL is None:
+    raise RuntimeError("DATABASE_URL is missing!")
+
+if DATABASE_URL == "":
+    raise RuntimeError("DATABASE_URL is an empty string!")
+
+# Railway uses postgres:// but SQLAlchemy requires postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # Railway uses postgres:// but SQLAlchemy requires postgresql://
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
